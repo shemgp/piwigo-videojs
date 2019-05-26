@@ -352,6 +352,21 @@ SELECT *
 		}
 	}
 
+	/* VR Plugin */
+	$vr_plugin = isset($conf['vjs_conf']['plugins']['vr']) ? strbool($conf['vjs_conf']['plugins']['vr']) : false;
+	$vr = array();
+	if ($vr_plugin)
+	{
+		$filename = $picture['current']['path'];
+		@include(__DIR__."/include/function_dependencies.php");
+		$sync_options['exiftool'] = 'exiftool';
+		if (isset($sync_binaries['exiftool']) and $sync_binaries['exiftool']) { include(dirname(__FILE__).'/include/exiftool.php'); }
+		if (isset($exif['projection']))
+		{
+			$vr['projection'] = $exif['projection'];
+		}
+	}
+
 	// Generate HTML5 tags
 	// Why the data-setup attribute does not work if only one video
 	$options = "";
@@ -399,6 +414,7 @@ SELECT *
 			'zoomrotate'         => $zoomrotate,
 			'watermark'          => $watermark,
 			'videos'             => $videos,
+			'vr'                 => $vr
 		)
 	);
 
